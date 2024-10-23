@@ -1,0 +1,47 @@
+# .github/workflows/pages.yml
+
+name: نشر محتوى ثابت على الصفحات
+
+on:
+  # يتم تشغيله عند الدفعات إلى الفرع الرئيسي
+  push:
+    branches: [ "main" ]
+
+  # السماح بتشغيل سير العمل يدويًا
+  workflow_dispatch:
+
+permissions:
+  contents: read  # إذن قراءة المحتوى
+  pages: write     # إذن الكتابة على صفحات GitHub
+  id-token: write  # إذن كتابة رمز المعرف
+
+concurrency:
+  group: "pages"  # السماح بنشر واحد فقط في نفس الوقت
+  cancel-in-progress: false  # لا يتم إلغاء عمليات النشر الجارية
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # تحديد بيئة التشغيل
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1  # استخدم الإصدار v1
+        with:
+          path: '.'  # تحميل كل الملفات في المستودع
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1  # استخدم الإصدار v1
+git add .github/workflows/pages.yaml
+git commit -m "Fix YAML structure for GitHub Pages workflow"
+git push origin main
