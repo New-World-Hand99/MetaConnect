@@ -1,0 +1,369 @@
+# These are supported funding model platforms
+
+github: # Replace with up to 4 GitHub Sponsors-enabled usernames e.g., [user1, user2]
+patreon: # Replace with a single Patreon username
+open_collective: # Replace with a single Open Collective username
+ko_fi: # Replace with a single Ko-fi username
+tidelift: # Replace with a single Tidelift platform-name/package-name e.g., npm/babel
+community_bridge: # Replace with a single Community Bridge project-name e.g., cloud-foundry
+liberapay: # Replace with a single Liberapay username
+issuehunt: # Replace with a single IssueHunt username
+lfx_crowdfunding: # Replace with a single LFX Crowdfunding project-name e.g., cloud-foundry
+polar: # Replace with a single Polar username
+buy_me_a_coffee: # Replace with a single Buy Me a Coffee username
+thanks_dev: # Replace with a single thanks.dev username
+custom: # Replace with up to 4 custom sponsorship URLs e.g., ['link1', 'link2']
+يمكنني توجيهك بكيفية إعداد جميع الملفات اللازمة لبدء المشروع، ولكن لا أستطيع إرسال الملفات بشكل مباشر. سأقدم لك مجموعة كاملة من المحتوى للملفات التي تحتاجها لتبدأ بها. يمكنك نسخ هذا المحتوى ولصقه في ملفاتك الخاصة.
+
+### هيكل المشروع
+
+```
+/MetaConnect
+  ├── /backend
+  │   ├── /models
+  │   │   ├── Transaction.js
+  │   │   └── User.js
+  │   ├── /routes
+  │   │   └── transactions.js
+  │   ├── server.js
+  │   └── .env
+  ├── /frontend
+  │   ├── /src
+  │   │   ├── /components
+  │   │   │   ├── Header.js
+  │   │   │   ├── Footer.js
+  │   │   │   ├── Home.js
+  │   │   │   ├── Profile.js
+  │   │   │   └── VirtualWorld.js
+  │   │   ├── App.js
+  │   │   └── index.js
+  │   ├── package.json
+  │   └── .env
+  └── README.md
+```
+
+### 1. ملف `README.md`
+
+```markdown
+# MetaConnect
+
+MetaConnect is an application that integrates the metaverse and virtual reality, supporting various digital payment methods.
+
+## System Requirements
+- Node.js
+- MongoDB
+
+## Setup Instructions
+
+### Frontend
+1. Navigate to the `frontend` folder.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the application:
+   ```bash
+   npm start
+   ```
+
+### Backend
+1. Navigate to the `backend` folder.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the server:
+   ```bash
+   node server.js
+   ```
+
+## Environment Variables
+Make sure to set up the `.env` files for both `frontend` and `backend`.
+```
+
+### 2. ملف `backend/server.js`
+
+```javascript
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+require('dotenv').config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+app.use('/api/transactions', require('./routes/transactions'));
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+```
+
+### 3. ملف `backend/models/User.js`
+
+```javascript
+const mongoose = require('mongoose');
+
+const UserSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  balance: { type: Number, default: 0 },
+  referrals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+});
+
+module.exports = mongoose.model('User', UserSchema);
+```
+
+### 4. ملف `backend/models/Transaction.js`
+
+```javascript
+const mongoose = require('mongoose');
+
+const TransactionSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  amount: { type: Number, required: true },
+  type: { type: String, enum: ['deposit', 'withdrawal'], required: true },
+  date: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Transaction', TransactionSchema);
+```
+
+### 5. ملف `backend/routes/transactions.js`
+
+```javascript
+const express = require('express');
+const router = express.Router();
+const Transaction = require('../models/Transaction');
+const User = require('../models/User');
+
+// Deposit route
+router.post('/deposit', async (req, res) => {
+  const { userId, amount } = req.body;
+  const newTransaction = new Transaction({ user: userId, amount, type: 'deposit' });
+  await newTransaction.save();
+  await User.findByIdAndUpdate(userId, { $inc: { balance: amount } });
+  res.status(200).json({ message: 'Deposit successful', transaction: newTransaction });
+});
+
+// Withdrawal route
+router.post('/withdraw', async (req, res) => {
+  const { userId, amount } = req.body;
+  const user = await User.findById(userId);
+  if (user.balance < amount) {
+    return res.status(400).json({ message: 'Insufficient balance' });
+  }
+  const newTransaction = new Transaction({ user: userId, amount, type: 'withdrawal' });
+  await newTransaction.save();
+  await User.findByIdAndUpdate(userId, { $inc: { balance: -amount } });
+  res.status(200).json({ message: 'Withdrawal successful', transaction: newTransaction });
+});
+
+module.exports = router;
+```
+
+### 6. ملف `backend/.env`
+
+```plaintext
+MONGO_URI=your_mongodb_connection_string
+```
+
+### 7. ملف `frontend/src/components/Header.js`
+
+```javascript
+import React from 'react';
+
+const Header = () => {
+  return (
+    <header>
+      <h1>MetaConnect</h1>
+      {/* Navigation links */}
+    </header>
+  );
+};
+
+export default Header;
+```
+
+### 8. ملف `frontend/src/components/Footer.js`
+
+```javascript
+import React from 'react';
+
+const Footer = () => {
+  return (
+    <footer>
+      <p>© 2024 MetaConnect</p>
+    </footer>
+  );
+};
+
+export default Footer;
+```
+
+### 9. ملف `frontend/src/components/Home.js`
+
+```javascript
+import React from 'react';
+
+const Home = () => {
+  return (
+    <div>
+      <h2>Welcome to MetaConnect!</h2>
+    </div>
+  );
+};
+
+export default Home;
+```
+
+### 10. ملف `frontend/src/components/Profile.js`
+
+```javascript
+import React from 'react';
+
+const Profile = () => {
+  return (
+    <div>
+      <h2>Your Profile</h2>
+    </div>
+  );
+};
+
+export default Profile;
+```
+
+### 11. ملف `frontend/src/components/VirtualWorld.js`
+
+```javascript
+import React from 'react';
+
+const VirtualWorld = () => {
+  return (
+    <div>
+      <h2>Explore the Virtual World</h2>
+    </div>
+  );
+};
+
+export default VirtualWorld;
+```
+
+### 12. ملف `frontend/src/App.js`
+
+```javascript
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Home from './components/Home';
+import Profile from './components/Profile';
+import VirtualWorld from './components/VirtualWorld';
+
+const App = () => {
+  return (
+    <Router>
+      <Header />
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/virtual-world" component={VirtualWorld} />
+      </Switch>
+      <Footer />
+    </Router>
+  );
+};
+
+export default App;
+```
+
+### 13. ملف `frontend/src/index.js`
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import './index.css';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+### 14. ملف `frontend/package.json`
+
+```json
+{
+  "name": "meta-connect",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.21.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+```
+
+### 15. ملف `frontend/.env`
+
+```plaintext
+REACT_APP_API_URL=http://localhost:5000/api
+```
+
+### Steps to Create the Project
+
+1. **Create the Project Structure:**
+   - Create the folder structure as outlined above.
+
+2. **Copy the Content:**
+   - Copy the content for each file as provided above into their respective files.
+
+3. **Install Dependencies:**
+   - Navigate to the `frontend` and `backend` folders separately and run:
+     ```bash
+     npm install
+     ```
+
+4. **Run the Applications:**
+   - Start the backend server with:
+     ```bash
+     node server.js
+     ```
+   - Start the frontend application with:
+     ```bash
+     npm start
+     ```
+
+### Conclusion
+
+This setup will give your developer a solid
+
+ foundation to start working on the MetaConnect project. You can easily expand and modify the features as needed. If you have any questions or need further modifications, feel free to ask!
