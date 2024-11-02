@@ -1,14 +1,12 @@
-# .github/dependabot.yml
-
-(<unknown>): could not find expected ':' while scanning a simple key at line 25 column 1version: 2
+version: 2
 
 updates:
   # 1. تحديث التبعيات الخاصة بـ npm في الواجهة الأمامية
-  - package-ecosystem: "npm"  # نظام إدارة الحزم
-    directory: "/frontend"  # مسار ملف package.json
+  - package-ecosystem: "npm"          # نظام إدارة الحزم
+    directory: "/frontend"             # مسار ملف package.json
     schedule:
-      interval: "weekly"  # يتم فحص التحديثات أسبوعيًا
-    open-pull-requests-limit: 5  # حد أقصى لطلبات السحب المفتوحة
+      interval: "weekly"                # يتم فحص التحديثات أسبوعيًا
+    open-pull-requests-limit: 5         # حد أقصى لطلبات السحب المفتوحة
 
   # 2. تحديث التبعيات الخاصة بـ npm في الواجهة الخلفية
   - package-ecosystem: "npm"
@@ -19,14 +17,6 @@ updates:
 
   # 3. مراقبة تبعيات GitHub Actions
   - package-ecosystem: "github-actions"
-    directory: "/"  # جذر المستودع
+    directory: "/"                      # جذر المستودع
     schedule:
-      interval: "daily"  # يتم فحص التحديثات يوميًا
-
-cd your-project/
-mkdir -p .github/dependabot
-
-touch .github/dependabot.yml
-git add .github/dependabot.yml
-git commit -m "Add Dependabot configuration"
-git push origin main
+      interval: "daily"                 # يتم فحص التحديثات يوميًا
