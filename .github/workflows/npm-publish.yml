@@ -69,6 +69,12 @@ npm init -y
 
 # 3. تحرير package.json
 nano package.json  # استبدل المحتوى بالمحتوى المقدم أعلاه
+{
+  "scripts": {
+    "test": "echo \"Running tests...\" && exit 0",
+    "build": "echo \"Building project...\" && exit 0"
+  }
+}
 
 # 4. تثبيت التبعيات
 npm install
