@@ -1,32 +1,23 @@
 import React from 'react';
-import PiLoginButton from './components/PiLoginButton';
-import PiPaymentButton from './components/PiPaymentButton';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Home from './components/Home';
+import Profile from './components/Profile';
+import VirtualWorld from './components/VirtualWorld';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <h1>Welcome to PiHub</h1>
-      <PiLoginButton />
-      <PiPaymentButton />
-    </div>
+    <Router>
+      <Header />
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/virtual-world" component={VirtualWorld} />
+      </Switch>
+      <Footer />
+    </Router>
   );
-}
+};
 
 export default App;
-
- PiLoginButton.jsimport { Pi } from '@pihq/pi-web-sdk';
-
-const pi = Pi.init({ version: '2.0', sandbox: true });
-
-export default function PiLoginButton() {
-  const handleLogin = async () => {
-    try {
-      const auth = await pi.authenticate();
-      alert(`Welcome, ${auth.user.username}!`);
-    } catch (error) {
-      console.error('Login failed', error);
-    }
-  };
-
-  return <button onClick={handleLogin}>Login with Pi</button>;
-}
