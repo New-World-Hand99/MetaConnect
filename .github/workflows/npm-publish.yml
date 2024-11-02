@@ -1,33 +1,90 @@
 # This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+
 # For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
 
-name: Node.js Package
+name: Node.js CI
 
 on:
-  release:
-    types: [created]
+push:
+branches: [ "main" ]
+pull_request:
+branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm test
+build:
+runs-on: ubuntu-latest
 
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+steps:
+# 1. Check the repository
+- name: Checkout code
+uses: actions/checkout@v4
+
+# 2. Setup Node.js
+- name: Setup Node.js
+uses: actions/setup-node@v4
+with:
+node-version: '16' # You can change the version as per your need
+
+# 3. Install dependencies
+- name: Install dependencies
+run: npm ci # Make sure there is package-lock.json
+{
+  "name": "my-nodejs-project",
+  "version": "1.0.0",
+  "description": "A simple Node.js project with Express and Mongoose.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node index.js",
+    "build": "echo \"Building project...\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/my-nodejs-project.git"
+  },
+  "keywords": [
+    "nodejs", "express", "mongoose"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.1.0",
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "jest": "^27.0.0"
+  }
+}
+
+#4. Run tests
+- name: Run tests
+run: npm test
+ # 1. إنشاء المجلد
+mkdir my-nodejs-project
+cd my-nodejs-project
+
+# 2. تهيئة المشروع
+npm init -y
+
+# 3. تحرير package.json
+nano package.json  # استبدل المحتوى بالمحتوى المقدم أعلاه
+
+# 4. تثبيت التبعيات
+npm install
+
+# 5. إضافة package-lock.json إلى Git
+git add package-lock.json
+git commit -m "Add package-lock.json"
+
+# 6. إعداد GitHub Actions
+mkdir -p .github/workflows
+touch .github/workflows/nodejs-build.yml
+nano .github/workflows/nodejs-build.yml  # انسخ المحتوى المقدم أعلاه
+
+# 7. إضافة CI workflow إلى Git
+git add .github/workflows/nodejs-build.yml
+git commit -m "Add CI workflow for Node.js project"
+
+# 8. دفع التغييرات إلى GitHub
+git push origin main
