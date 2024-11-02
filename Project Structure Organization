@@ -211,93 +211,47 @@ import './index.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-  │   ├── package.json{
-  "name": "meta-connect",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "axios": "^0.21.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
-    "bcrypt": "^5.0.1"
-  },
+  │   ├── package.json
+{mkdir my-nodejs-project
+cd my-nodejs-project
+npm init -y
+nano package.json  # استبدل المحتوى بالمحتوى المقدم أعلاه
+npm install express mongoose dotenv
+npm install --save-dev jest
+git init
+git add package.json package-lock.json
+git commit -m "Initialize project with package.json and dependencies"
+git remote add origin https://github.com/your-username/my-nodejs-project.git
+git push -u origin main
+
+  "name": "your-project-name",        // ضع هنا اسم مشروعك
+  "version": "1.0.0",
+  "description": "A Node.js project with CI/CD using GitHub Actions.",
+  "main": "index.js",                  // اسم الملف الرئيسي لمشروعك
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "jest",                    // استخدم Jest لتشغيل الاختبارات
+    "build": "echo \"Building project...\" && exit 0", // بناء المشروع
+    "start": "node index.js"           // تشغيل المشروع
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/your-repo.git" // ضع هنا رابط مستودعك
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [],
+  "author": "Your Name",               // ضع هنا اسمك
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",              // مثال على تبعية
+    "mongoose": "^6.1.0",              // مثال على تبعية أخرى
+    "dotenv": "^10.0.0"                // لتحميل المتغيرات البيئية
+  },
+  "devDependencies": {
+    "jest": "^27.0.0"                  // مكتبة للاختبارات
   }
 }
 
-bash
-     cd backend
-  │ عند استخدام الأمر `npm install`، ستقوم بتثبيت جميع الاعتمادات (packages) المدرجة في ملف `package.json` لمشروعك. إليك كيفية استخدام هذا الأمر بشكل صحيح في سياق مشروعك:
-
-### خطوات تثبيت الاعتمادات
-
-#### 1. **انتقل إلى مجلد المشروع:**
-   - إذا كنت تعمل على مشروع MetaConnect، تأكد من أنك في المجلد الجذر للمشروع.
-
-#### 2. **تثبيت اعتمادات الجزء الخلفي (Backend):**
-   - انتقل إلى مجلد `backend`:
-     ```bash
-     cd backend
-     ```
-   - قم بتثبيت الاعتمادات:
-     ```bash
-     npm install
-     ```
-   - هذا الأمر سيقوم بقراءة ملف `package.json` في مجلد `backend` وتثبيت جميع المكتبات المطلوبة، مثل `express`, `mongoose`, و`bcrypt`.
-
-#### 3. **تثبيت اعتمادات الواجهة الأمامية (Frontend):**
-   - انتقل إلى مجلد `frontend`:
-     ```bash
-     cd ../frontend
-     ```
-   - قم بتثبيت الاعتمادات:
-     ```bash
-     npm install
-     ```
-   - هذا الأمر سيقوم بتثبيت جميع المكتبات المطلوبة في الواجهة الأمامية، مثل `react`, `react-dom`, و`react-router-dom`.
-
-### ملاحظات
-
-- **تأكد من وجود Node.js و npm مثبتين**: تأكد من أن لديك Node.js و npm مثبتين على جهازك. يمكنك التحقق من ذلك باستخدام الأوامر:
-  ```bash
-  node -v
-  npm -v
-  ```
-
-1. لتشغيل الجزء الخلفي:
-   ```bash
-   node server.js
-   ```
-2. لتشغيل الواجهة الأمامية:
-   ```bash
-   npm start
-   ```
-
-إذا كان لديك أي استفسارات أو تحتاج إلى مساعدة إضافية، فلا تتردد في طرحها!  └── .envREACT_APP_API_URL=http://localhost:5000/api
+   └── .env
+REACT_APP_API_URL=http://localhost:5000/api
 
   └── README.md# MetaConnect
 
