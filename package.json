@@ -1,5 +1,3 @@
-npm init -y
-npm install --save-dev prettier eslint husky
 {
   "semi": true,
   "singleQuote": true,
