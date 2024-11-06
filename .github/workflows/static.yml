@@ -42,6 +42,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1  # استخدم الإصدار v1
-git add .github/workflows/pages.yaml
+git add GitHub/ .github/workflows/static.yml
 git commit -m "Fix YAML structure for GitHub Pages workflow"
 git push origin main
